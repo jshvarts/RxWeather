@@ -11,7 +11,6 @@ import com.jshvarts.rxweather.entities.WeatherData;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class WeatherAdapter extends RecyclerView.Adapter<WeatherViewHolder> implements View.OnClickListener {
 

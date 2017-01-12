@@ -7,6 +7,8 @@ import android.widget.TextView;
 
 import com.jshvarts.rxweather.R;
 import com.jshvarts.rxweather.entities.WeatherData;
+import com.jshvarts.rxweather.infrastruture.RxWeatherApplication;
+import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,7 +49,9 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder {
         }
 
         weatherDate.setText(date);
-        weatherImage.setImageResource(R.mipmap.ic_launcher);
+        Picasso.with(itemView.getContext())
+                .load(getImageUrl(weatherData.getIcon()))
+                .into(weatherImage);
         minTemp.setText(getRoundedWeatherTemp(weatherData.getMinTemp()));
         maxTemp.setText(getRoundedWeatherTemp(weatherData.getMaxTemp()));
         weatherDetail.setText(weatherData.getWeatherDetail());
@@ -56,5 +60,9 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder {
     private String getRoundedWeatherTemp(double weatherTemp) {
         final double roundedTemp = Math.round(weatherTemp);
         return Double.toString(roundedTemp);
+    }
+
+    private String getImageUrl(String icon) {
+        return RxWeatherApplication.BASE_WEATHER_ICON_URL+icon+".png";
     }
 }

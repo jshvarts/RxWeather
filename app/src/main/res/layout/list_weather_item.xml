@@ -16,15 +16,15 @@
         <ImageView
             android:id="@+id/list_weather_item_imageView"
             android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_weight="0.1" />
+            android:layout_height="38dp"
+            android:layout_weight="0.2" />
         
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="7dp"
-            android:layout_weight="0.7">
+            android:layout_weight="0.6">
 
             <TextView
                 android:id="@+id/list_weather_item_date"

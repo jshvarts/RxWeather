@@ -11,11 +11,20 @@ public class WeatherData implements Parcelable {
     private double maxTemp;
     private double pressure;
     private double humidity;
+    private String weatherDate;
     private String weatherSummary;
     private String weatherDetail;
-    private String weatherDate;
+    private String icon;
 
-    public WeatherData(double humidity, double maxTemp, double minTemp, double pressure, String weatherDate, String weatherDetail, String weatherSummary) {
+    // TODO Apply builder pattern
+    public WeatherData(double humidity,
+                       double maxTemp,
+                       double minTemp,
+                       double pressure,
+                       String weatherDate,
+                       String weatherDetail,
+                       String weatherSummary,
+                       String icon) {
         this.humidity = humidity;
         this.maxTemp = maxTemp;
         this.minTemp = minTemp;
@@ -23,6 +32,7 @@ public class WeatherData implements Parcelable {
         this.weatherDate = weatherDate;
         this.weatherDetail = weatherDetail;
         this.weatherSummary = weatherSummary;
+        this.icon = icon;
     }
 
     protected WeatherData(Parcel in) {
@@ -30,9 +40,10 @@ public class WeatherData implements Parcelable {
         maxTemp = in.readDouble();
         pressure = in.readDouble();
         humidity = in.readDouble();
+        weatherDate = in.readString();
         weatherSummary = in.readString();
         weatherDetail = in.readString();
-        weatherDate = in.readString();
+        icon = in.readString();
     }
 
     @Override
@@ -41,9 +52,10 @@ public class WeatherData implements Parcelable {
         dest.writeDouble(maxTemp);
         dest.writeDouble(pressure);
         dest.writeDouble(humidity);
+        dest.writeString(weatherDate);
         dest.writeString(weatherSummary);
         dest.writeString(weatherDetail);
-        dest.writeString(weatherDate);
+        dest.writeString(icon);
     }
 
     public static final Creator<WeatherData> CREATOR = new Creator<WeatherData>() {
@@ -61,6 +73,10 @@ public class WeatherData implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 
     public double getHumidity() {
@@ -97,5 +113,9 @@ public class WeatherData implements Parcelable {
 
     public void setWeatherSummary(String weatherSummary) {
         this.weatherSummary = weatherSummary;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

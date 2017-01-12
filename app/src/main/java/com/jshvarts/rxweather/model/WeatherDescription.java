@@ -9,11 +9,17 @@ public class WeatherDescription {
     @SerializedName("description")
     private String detailedDescription;
 
+    private String icon;
+
     public String getBasicDescription() {
         return basicDescription;
     }
 
     public String getDetailedDescription() {
         return detailedDescription;
+    }
+
+    public String getIcon() {
+        return icon;
     }
 }

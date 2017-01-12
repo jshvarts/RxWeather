@@ -66,12 +66,15 @@ public class WeatherClient {
                     weatherDetails.getPressure(),
                     getDate(position),
                     "",
+                    "",
                     "");
 
             // now update weather descriptions
             for (WeatherDescription weatherDescription : weatherDetails.getWeatherDescriptions()) {
                 weatherData.setWeatherSummary(weatherDescription.getBasicDescription());
                 weatherData.setWeatherDetail(weatherDescription.getDetailedDescription());
+                weatherData.setWeatherDetail(weatherDescription.getDetailedDescription());
+                weatherData.setIcon(weatherDescription.getIcon());
             }
 
             weatherDataList.add(weatherData);
