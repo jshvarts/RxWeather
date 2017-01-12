@@ -39,6 +39,23 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
 
     private WeatherAdapter adapter;
     private Subscription weatherSubscription;
+    private Observer<List<WeatherData>> weatherObserver = new Observer<List<WeatherData>>() {
+        @Override
+        public void onCompleted() {
+            Log.d(LOG_TAG, "onCompleted");
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.d(LOG_TAG, "onError " + e);
+        }
+
+        @Override
+        public void onNext(List<WeatherData> weatherDataList) {
+            Log.d(LOG_TAG, "onNext");
+            adapter.setWeatherDataList(weatherDataList);
+        }
+    };
 
     public static ForecastFragment newInstance() {
         return new ForecastFragment();
@@ -71,23 +88,7 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
                         }
                     })
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<List<WeatherData>>() {
-                        @Override
-                        public void onCompleted() {
-                            Log.d(LOG_TAG, "onCompleted");
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            Log.d(LOG_TAG, "onError " + e);
-                        }
-
-                        @Override
-                        public void onNext(List<WeatherData> weatherDataList) {
-                            Log.d(LOG_TAG, "onNext");
-                            adapter.setWeatherDataList(weatherDataList);
-                        }
-                    });
+                    .subscribe(weatherObserver);
     }
 
     @Override
