@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.jshvarts.rxweather.R;
 import com.jshvarts.rxweather.entities.WeatherData;
@@ -28,10 +30,16 @@ import rx.schedulers.Schedulers;
 
 public class ForecastFragment extends Fragment implements WeatherAdapter.WeatherClickListener {
 
+    private static final String DEFAULT_ZIP_CODE = "11229";
+    private static final String DEFAULT_TEMPERATURE_UNITS = "imperial";
+
     private static final String LOG_TAG = ForecastFragment.class.getSimpleName();
 
     @BindView(R.id.fragment_forecast_recyclerView)
     RecyclerView recyclerView;
+
+    @BindView(R.id.fragment_forecast_progressBar)
+    ProgressBar progressBar;
 
     private WeatherAdapter adapter;
     private Subscription weatherSubscription;
@@ -39,11 +47,14 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
         @Override
         public void onCompleted() {
             Log.d(LOG_TAG, "onCompleted");
+            hideProgressBar();
         }
 
         @Override
         public void onError(Throwable e) {
             Log.d(LOG_TAG, "onError " + e);
+            hideProgressBar();
+            Toast.makeText(getActivity(), R.string.error_message, Toast.LENGTH_LONG).show();
         }
 
         @Override
@@ -63,12 +74,13 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
         View rootView = inflater.inflate(R.layout.fragment_forecast, container, false);
         ButterKnife.bind(this, rootView);
 
-        adapter = new WeatherAdapter(getActivity(), this);
+        showProgressBar();
 
+        adapter = new WeatherAdapter(getActivity(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
 
-        getWeather("10036", "imperial");
+        getWeather(DEFAULT_ZIP_CODE, DEFAULT_TEMPERATURE_UNITS);
 
         return rootView;
     }
@@ -98,5 +110,13 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
     @Override
     public void onClicked(WeatherData weatherData) {
         Log.d(LOG_TAG, "weather clicked");
+    }
+
+    private void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
     }
 }
