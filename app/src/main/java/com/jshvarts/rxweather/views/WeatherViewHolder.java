@@ -63,6 +63,6 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder {
     }
 
     private String getImageUrl(String icon) {
-        return RxWeatherApplication.BASE_WEATHER_ICON_URL+icon+".png";
+        return String.format(RxWeatherApplication.WEATHER_ICON_URL_PATTERN, icon);
     }
 }

@@ -37,7 +37,6 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherViewHolder> impl
     }
 
     public void setWeatherDataList(List<WeatherData> weatherDataList) {
-        // TODO advantages over this.weatherDataList = weatherDataList?
         this.weatherDataList.clear();
         this.weatherDataList.addAll(weatherDataList);
         notifyDataSetChanged();
