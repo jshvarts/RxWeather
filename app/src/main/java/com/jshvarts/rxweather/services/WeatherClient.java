@@ -21,6 +21,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import rx.Observable;
 
 public class WeatherClient {
+    private static String MODE = "json";
+    private static String INCLUDE_DAYS = "14";
     private static WeatherClient instance;
     private WeatherWebService weatherWebService;
 
@@ -52,7 +54,11 @@ public class WeatherClient {
     }
 
     public Observable<WeatherListModel> getWeather(String zip, String units) {
-        return weatherWebService.getWeather(zip, "json", units, "7", BuildConfig.WEATHER_API_KEY);
+        return weatherWebService.getWeather(zip,
+                MODE,
+                units,
+                INCLUDE_DAYS,
+                BuildConfig.WEATHER_API_KEY);
     }
 
     public List<WeatherData> weatherDataConverter(WeatherListModel weatherListModel) {
@@ -65,14 +71,13 @@ public class WeatherClient {
                     weatherDetails.getTemperatureDetails().getMinTemp(),
                     weatherDetails.getPressure(),
                     getDate(position),
-                    "",
-                    "",
-                    "");
+                    null,
+                    null,
+                    null);
 
             // now update weather descriptions
             for (WeatherDescription weatherDescription : weatherDetails.getWeatherDescriptions()) {
                 weatherData.setWeatherSummary(weatherDescription.getBasicDescription());
-                weatherData.setWeatherDetail(weatherDescription.getDetailedDescription());
                 weatherData.setWeatherDetail(weatherDescription.getDetailedDescription());
                 weatherData.setIcon(weatherDescription.getIcon());
             }
