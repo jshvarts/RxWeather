@@ -16,10 +16,6 @@ import com.jshvarts.rxweather.model.WeatherListModel;
 import com.jshvarts.rxweather.services.WeatherClient;
 import com.jshvarts.rxweather.views.WeatherAdapter;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -102,25 +98,5 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
     @Override
     public void onClicked(WeatherData weatherData) {
         Log.d(LOG_TAG, "weather clicked");
-    }
-
-    @Deprecated
-    private List<WeatherData> getWeather() {
-        List<WeatherData> weatherDataList = new ArrayList<>();
-        WeatherData weatherData;
-        for (int i = 0; i < 7; i++) {
-            weatherData = new WeatherData(20.0, 50.0, 40.0, 25.5, getDate(i), "clear", "very clear");
-            weatherDataList.add(weatherData);
-        }
-        return weatherDataList;
-    }
-
-    @Deprecated
-    private String getDate(int index) {
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.add(GregorianCalendar.DATE, index);
-        Date date = gregorianCalendar.getTime();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EE MM dd");
-        return simpleDateFormat.format(date);
     }
 }

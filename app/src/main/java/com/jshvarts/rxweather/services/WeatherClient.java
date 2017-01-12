@@ -59,20 +59,16 @@ public class WeatherClient {
         List<WeatherData> weatherDataList = new ArrayList<>();
         int position = 0;
         for (WeatherDetails weatherDetails : weatherListModel.weatherDetailsList) {
-            GregorianCalendar calendar = new GregorianCalendar();
-            calendar.add(GregorianCalendar.DATE, position);
-            Date time = calendar.getTime();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MM dd");
-
             WeatherData weatherData = new WeatherData(
                     weatherDetails.getHumidity(),
                     weatherDetails.getTemperatureDetails().getMaxTemp(),
                     weatherDetails.getTemperatureDetails().getMinTemp(),
                     weatherDetails.getPressure(),
-                    simpleDateFormat.format(time),
+                    getDate(position),
                     "",
                     "");
 
+            // now update weather descriptions
             for (WeatherDescription weatherDescription : weatherDetails.getWeatherDescriptions()) {
                 weatherData.setWeatherSummary(weatherDescription.getBasicDescription());
                 weatherData.setWeatherDetail(weatherDescription.getDetailedDescription());
@@ -84,5 +80,13 @@ public class WeatherClient {
         }
 
         return weatherDataList;
+    }
+
+    private String getDate(int position) {
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.add(GregorianCalendar.DATE, position);
+        Date date = gregorianCalendar.getTime();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EE MM dd");
+        return simpleDateFormat.format(date);
     }
 }
