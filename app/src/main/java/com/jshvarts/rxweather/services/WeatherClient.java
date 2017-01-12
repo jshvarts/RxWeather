@@ -66,10 +66,8 @@ public class WeatherClient {
         int position = 0;
         for (WeatherDetails weatherDetails : weatherListModel.weatherDetailsList) {
             WeatherData weatherData = new WeatherData(
-                    weatherDetails.getHumidity(),
                     weatherDetails.getTemperatureDetails().getMaxTemp(),
                     weatherDetails.getTemperatureDetails().getMinTemp(),
-                    weatherDetails.getPressure(),
                     getDate(position),
                     null,
                     null,

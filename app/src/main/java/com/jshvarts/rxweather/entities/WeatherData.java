@@ -9,26 +9,20 @@ import android.os.Parcelable;
 public class WeatherData implements Parcelable {
     private double minTemp;
     private double maxTemp;
-    private double pressure;
-    private double humidity;
     private String weatherDate;
     private String weatherSummary;
     private String weatherDetail;
     private String icon;
 
     // TODO Apply builder pattern
-    public WeatherData(double humidity,
-                       double maxTemp,
+    public WeatherData(double maxTemp,
                        double minTemp,
-                       double pressure,
                        String weatherDate,
                        String weatherDetail,
                        String weatherSummary,
                        String icon) {
-        this.humidity = humidity;
         this.maxTemp = maxTemp;
         this.minTemp = minTemp;
-        this.pressure = pressure;
         this.weatherDate = weatherDate;
         this.weatherDetail = weatherDetail;
         this.weatherSummary = weatherSummary;
@@ -38,8 +32,6 @@ public class WeatherData implements Parcelable {
     protected WeatherData(Parcel in) {
         minTemp = in.readDouble();
         maxTemp = in.readDouble();
-        pressure = in.readDouble();
-        humidity = in.readDouble();
         weatherDate = in.readString();
         weatherSummary = in.readString();
         weatherDetail = in.readString();
@@ -50,8 +42,6 @@ public class WeatherData implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeDouble(minTemp);
         dest.writeDouble(maxTemp);
-        dest.writeDouble(pressure);
-        dest.writeDouble(humidity);
         dest.writeString(weatherDate);
         dest.writeString(weatherSummary);
         dest.writeString(weatherDetail);
@@ -79,20 +69,12 @@ public class WeatherData implements Parcelable {
         return icon;
     }
 
-    public double getHumidity() {
-        return humidity;
-    }
-
     public double getMaxTemp() {
         return maxTemp;
     }
 
     public double getMinTemp() {
         return minTemp;
-    }
-
-    public double getPressure() {
-        return pressure;
     }
 
     public String getWeatherDate() {
