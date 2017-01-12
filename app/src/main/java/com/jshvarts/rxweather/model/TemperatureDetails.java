@@ -4,16 +4,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class TemperatureDetails {
     @SerializedName("min")
-    private String minTemp;
+    private double minTemp;
 
     @SerializedName("max")
-    private String maxTemp;
+    private double maxTemp;
 
-    public String getMaxTemp() {
+    public double getMaxTemp() {
         return maxTemp;
     }
 
-    public String getMinTemp() {
+    public double getMinTemp() {
         return minTemp;
     }
 }

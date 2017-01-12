@@ -90,4 +90,12 @@ public class WeatherData implements Parcelable {
     public String getWeatherSummary() {
         return weatherSummary;
     }
+
+    public void setWeatherDetail(String weatherDetail) {
+        this.weatherDetail = weatherDetail;
+    }
+
+    public void setWeatherSummary(String weatherSummary) {
+        this.weatherSummary = weatherSummary;
+    }
 }
