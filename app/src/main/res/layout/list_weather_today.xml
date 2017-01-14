@@ -17,24 +17,50 @@
             android:id="@+id/list_weather_item_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:text="date" />
-
-        <TextView
-            android:id="@+id/list_weather_item_maxTemp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:text="maxTemp" />
+            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/list_weather_item_minTemp"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="minTemp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hi"
+                android:textStyle="bold"
+                android:layout_marginRight="10dp" />
+
+            <TextView
+                android:id="@+id/list_weather_item_maxTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lo"
+                android:textStyle="bold"
+                android:layout_marginRight="10dp" />
+
+            <TextView
+                android:id="@+id/list_weather_item_minTemp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -52,8 +78,7 @@
             android:id="@+id/list_weather_item_weatherDetail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="detail" />
+            android:layout_gravity="center" />
 
     </LinearLayout>
 

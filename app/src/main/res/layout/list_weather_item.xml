@@ -30,7 +30,8 @@
                 android:id="@+id/list_weather_item_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="date" />
+                android:text="date"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/list_weather_item_weatherDetail"
