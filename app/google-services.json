@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "599676364020",
+    "firebase_url": "https://rxweather-43817.firebaseio.com",
+    "project_id": "rxweather-43817",
+    "storage_bucket": "rxweather-43817.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599676364020:android:50b450d3cb3ca820",
+        "android_client_info": {
+          "package_name": "com.jshvarts.rxweather"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "599676364020-7jm4pm6j59t2cdgcanjnf12lkk7tu8kj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jshvarts.rxweather",
+            "certificate_hash": "2950D0ECDE430724B10A87EE4768492585053B67"
+          }
+        },
+        {
+          "client_id": "599676364020-fctilbrbasvqf6grrl32k3seihaeoks3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4-VLF-WskW6adkGJ6MoCtP_UedjSMWUo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "599676364020-fctilbrbasvqf6grrl32k3seihaeoks3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
