@@ -58,8 +58,8 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder {
     }
 
     private String getRoundedWeatherTemp(double weatherTemp) {
-        final double roundedTemp = Math.round(weatherTemp);
-        return Double.toString(roundedTemp);
+        final long roundedTemp = Math.round(weatherTemp);
+        return Long.toString(roundedTemp);
     }
 
     private String getImageUrl(String icon) {
