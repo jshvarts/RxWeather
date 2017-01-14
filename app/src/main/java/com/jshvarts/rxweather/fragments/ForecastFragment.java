@@ -33,9 +33,6 @@ import rx.schedulers.Schedulers;
 
 public class ForecastFragment extends Fragment implements WeatherAdapter.WeatherClickListener {
 
-    private static final String DEFAULT_ZIP_CODE = "11229";
-    private static final String DEFAULT_TEMPERATURE_UNITS = "imperial";
-
     private static final String LOG_TAG = ForecastFragment.class.getSimpleName();
 
     @BindView(R.id.fragment_forecast_recyclerView)

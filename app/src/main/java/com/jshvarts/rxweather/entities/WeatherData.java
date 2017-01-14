@@ -1,12 +1,9 @@
 package com.jshvarts.rxweather.entities;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 /**
  * Weather POJO.
  */
-public class WeatherData implements Parcelable {
+public class WeatherData {
     private double minTemp;
     private double maxTemp;
     private String weatherDate;
@@ -29,40 +26,7 @@ public class WeatherData implements Parcelable {
         this.icon = icon;
     }
 
-    protected WeatherData(Parcel in) {
-        minTemp = in.readDouble();
-        maxTemp = in.readDouble();
-        weatherDate = in.readString();
-        weatherSummary = in.readString();
-        weatherDetail = in.readString();
-        icon = in.readString();
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeDouble(minTemp);
-        dest.writeDouble(maxTemp);
-        dest.writeString(weatherDate);
-        dest.writeString(weatherSummary);
-        dest.writeString(weatherDetail);
-        dest.writeString(icon);
-    }
-
-    public static final Creator<WeatherData> CREATOR = new Creator<WeatherData>() {
-        @Override
-        public WeatherData createFromParcel(Parcel in) {
-            return new WeatherData(in);
-        }
-
-        @Override
-        public WeatherData[] newArray(int size) {
-            return new WeatherData[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
+    public WeatherData() {
     }
 
     public String getIcon() {
