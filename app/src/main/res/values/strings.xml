@@ -1,4 +1,18 @@
 <resources>
     <string name="app_name">RxWeather</string>
     <string name="error_message">There was an error loading weather data.</string>
+
+    <string name="preference_location_label">Location</string>
+    <string name="preference_location_key">location</string>
+    <string name="preference_location_default">11229</string>
+
+    <string name="preference_units_label">Units</string>
+    <string name="preference_units_label_title">Choose units</string>
+    <string name="preference_units_key">units</string>
+
+    <string name="preference_units_entry_imperial">Imperial</string>
+    <string name="preference_units_entry_metric">Metric</string>
+    <string name="preference_units_entry_imperial_value">Imperial</string>
+    <string name="preference_units_entry_metric_value">Metric</string>
+
 </resources>

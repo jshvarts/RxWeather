@@ -1,6 +1,8 @@
 package com.jshvarts.rxweather.fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.jshvarts.rxweather.R;
 import com.jshvarts.rxweather.entities.WeatherData;
+import com.jshvarts.rxweather.infrastruture.RxWeatherApplication;
 import com.jshvarts.rxweather.model.WeatherListModel;
 import com.jshvarts.rxweather.services.WeatherClient;
 import com.jshvarts.rxweather.views.WeatherAdapter;
@@ -76,13 +79,21 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
 
         showProgressBar();
 
+        return rootView;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_LOCATION, getString(R.string.preference_location_default));
+        String units = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_UNITS, getString(R.string.preference_units_entry_imperial_value));
+
         adapter = new WeatherAdapter(getActivity(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-
-        getWeather(DEFAULT_ZIP_CODE, DEFAULT_TEMPERATURE_UNITS);
-
-        return rootView;
+        getWeather(location, units);
     }
 
     private void getWeather(String zip, String units) {
