@@ -92,7 +92,7 @@ public class WeatherClient {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.add(GregorianCalendar.DATE, position);
         Date date = gregorianCalendar.getTime();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EE MM dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EE, MMM d");
         return simpleDateFormat.format(date);
     }
 }
