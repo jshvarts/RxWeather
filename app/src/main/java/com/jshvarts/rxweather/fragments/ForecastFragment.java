@@ -38,7 +38,7 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
 
     private static final String LOG_TAG = ForecastFragment.class.getSimpleName();
 
-    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+    private DatabaseReference dataRef = FirebaseDatabase.getInstance().getReferenceFromUrl(RxWeatherApplication.BASE_FIREBASE_URL);
 
     @BindView(R.id.fragment_forecast_recyclerView)
     RecyclerView recyclerView;
@@ -48,6 +48,8 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
 
     private WeatherAdapter adapter;
     private Subscription weatherSubscription;
+    private String appId;
+
     private Observer<List<WeatherData>> weatherObserver = new Observer<List<WeatherData>>() {
         @Override
         public void onCompleted() {
@@ -79,6 +81,15 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
         View rootView = inflater.inflate(R.layout.fragment_forecast, container, false);
         ButterKnife.bind(this, rootView);
 
+        SharedPreferences appPreferences = getActivity()
+                .getSharedPreferences(RxWeatherApplication.APP_ID_PREFERENCE, Context.MODE_PRIVATE);
+        appId = appPreferences.getString(RxWeatherApplication.APP_ID, "");
+        if (appId.isEmpty()) {
+            // create unique id and store it
+            appId = dataRef.push().getKey();
+            appPreferences.edit().putString(RxWeatherApplication.APP_ID, appId).apply();
+        }
+
         showProgressBar();
 
         return rootView;
@@ -89,15 +100,6 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
         super.onStart();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        SharedPreferences appPreferences = getActivity()
-                .getSharedPreferences(RxWeatherApplication.APP_ID_PREFERENCE, Context.MODE_PRIVATE);
-        String appId = appPreferences.getString(RxWeatherApplication.APP_ID, "");
-        if (appId.isEmpty()) {
-            // create unique id and store it
-            dbRef.push();
-            appPreferences.edit().putString(RxWeatherApplication.APP_ID, dbRef.getKey()).apply();
-        }
 
         String location = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_LOCATION, getString(R.string.preference_location_default));
         String units = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_UNITS, getString(R.string.preference_units_entry_imperial_value));
@@ -115,7 +117,7 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
                     .map(new Func1<WeatherListModel, List<WeatherData>>() {
                         @Override
                         public List<WeatherData> call(WeatherListModel weatherListModel) {
-                            return WeatherClient.newInstance().weatherDataConverter(weatherListModel);
+                            return WeatherClient.newInstance().weatherDataConverter(weatherListModel, dataRef.child(appId));
                         }
                     })
                     .observeOn(AndroidSchedulers.mainThread())

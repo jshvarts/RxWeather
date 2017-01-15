@@ -3,7 +3,6 @@ package com.jshvarts.rxweather.services;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.jshvarts.rxweather.BuildConfig;
 import com.jshvarts.rxweather.entities.WeatherData;
@@ -15,7 +14,9 @@ import com.jshvarts.rxweather.model.WeatherListModel;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -26,10 +27,9 @@ import rx.Observable;
 
 public class WeatherClient {
     private static String MODE = "json";
-    private static String INCLUDE_DAYS = "14";
+    private static String INCLUDE_DAYS = "7";
     private static WeatherClient instance;
     private final WeatherWebService weatherWebService;
-    private DatabaseReference dbRef = null;
 
     private WeatherClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -49,8 +49,6 @@ public class WeatherClient {
                 .build();
 
         weatherWebService = retrofit.create(WeatherWebService.class);
-
-        dbRef = FirebaseDatabase.getInstance().getReference();
     }
 
     public static WeatherClient newInstance() {
@@ -68,7 +66,7 @@ public class WeatherClient {
                 BuildConfig.WEATHER_API_KEY);
     }
 
-    public List<WeatherData> weatherDataConverter(WeatherListModel weatherListModel) {
+    public List<WeatherData> weatherDataConverter(WeatherListModel weatherListModel, final DatabaseReference appDataRef) {
         final List<WeatherData> weatherDataList = new ArrayList<>();
         int position = 0;
         for (WeatherDetails weatherDetails : weatherListModel.weatherDetailsList) {
@@ -92,13 +90,26 @@ public class WeatherClient {
             position++;
         }
 
-        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        appDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (!dataSnapshot.hasChildren()) {
                     int index = 0;
                     for (WeatherData weatherData : weatherDataList) {
-                        dbRef.child(Integer.toString(index)).setValue(weatherData);
+                        appDataRef.child(Integer.toString(index)).setValue(weatherData);
+                        index++;
+                    }
+                } else {
+                    int index = 0;
+                    for (WeatherData weatherData : weatherDataList) {
+                        Map newWeatherData = new HashMap();
+                        newWeatherData.put("icon", weatherData.getIcon());
+                        newWeatherData.put("maxTemp", weatherData.getMaxTemp());
+                        newWeatherData.put("minTemp", weatherData.getMinTemp());
+                        newWeatherData.put("weatherDate", weatherData.getWeatherDate());
+                        newWeatherData.put("weatherDetail", weatherData.getWeatherDetail());
+                        newWeatherData.put("weatherSummary", weatherData.getWeatherSummary());
+                        appDataRef.child(Integer.toString(index)).updateChildren(newWeatherData);
                         index++;
                     }
                 }
