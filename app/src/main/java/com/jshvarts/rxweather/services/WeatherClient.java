@@ -14,7 +14,6 @@ import com.jshvarts.rxweather.model.WeatherListModel;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -29,8 +28,8 @@ public class WeatherClient {
     private static String MODE = "json";
     private static String INCLUDE_DAYS = "14";
     private static WeatherClient instance;
-    private WeatherWebService weatherWebService;
-    DatabaseReference dbRef = null;
+    private final WeatherWebService weatherWebService;
+    private DatabaseReference dbRef = null;
 
     private WeatherClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -116,8 +115,6 @@ public class WeatherClient {
     private String getDate(int position) {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.add(GregorianCalendar.DATE, position);
-        Date date = gregorianCalendar.getTime();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EE, MMM d");
-        return simpleDateFormat.format(date);
+        return new SimpleDateFormat("EE, MMM d").format(gregorianCalendar.getTime());
     }
 }
