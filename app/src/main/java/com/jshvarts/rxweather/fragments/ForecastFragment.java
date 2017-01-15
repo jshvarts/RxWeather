@@ -1,5 +1,6 @@
 package com.jshvarts.rxweather.fragments;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.jshvarts.rxweather.R;
 import com.jshvarts.rxweather.entities.WeatherData;
 import com.jshvarts.rxweather.infrastruture.RxWeatherApplication;
@@ -34,6 +37,8 @@ import rx.schedulers.Schedulers;
 public class ForecastFragment extends Fragment implements WeatherAdapter.WeatherClickListener {
 
     private static final String LOG_TAG = ForecastFragment.class.getSimpleName();
+
+    DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
 
     @BindView(R.id.fragment_forecast_recyclerView)
     RecyclerView recyclerView;
@@ -84,6 +89,16 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
         super.onStart();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        SharedPreferences appPreferences = getActivity()
+                .getSharedPreferences(RxWeatherApplication.APP_ID_PREFERENCE, Context.MODE_PRIVATE);
+        String appId = appPreferences.getString(RxWeatherApplication.APP_ID, "");
+        if (appId.isEmpty()) {
+            // create unique id and store it
+            dbRef.push();
+            appPreferences.edit().putString(RxWeatherApplication.APP_ID, dbRef.getKey()).apply();
+        }
+
         String location = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_LOCATION, getString(R.string.preference_location_default));
         String units = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_UNITS, getString(R.string.preference_units_entry_imperial_value));
 

@@ -1,5 +1,10 @@
 package com.jshvarts.rxweather.services;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jshvarts.rxweather.BuildConfig;
 import com.jshvarts.rxweather.entities.WeatherData;
 import com.jshvarts.rxweather.infrastruture.RxWeatherApplication;
@@ -25,6 +30,7 @@ public class WeatherClient {
     private static String INCLUDE_DAYS = "14";
     private static WeatherClient instance;
     private WeatherWebService weatherWebService;
+    DatabaseReference dbRef = null;
 
     private WeatherClient() {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
@@ -44,6 +50,8 @@ public class WeatherClient {
                 .build();
 
         weatherWebService = retrofit.create(WeatherWebService.class);
+
+        dbRef = FirebaseDatabase.getInstance().getReference();
     }
 
     public static WeatherClient newInstance() {
@@ -62,7 +70,7 @@ public class WeatherClient {
     }
 
     public List<WeatherData> weatherDataConverter(WeatherListModel weatherListModel) {
-        List<WeatherData> weatherDataList = new ArrayList<>();
+        final List<WeatherData> weatherDataList = new ArrayList<>();
         int position = 0;
         for (WeatherDetails weatherDetails : weatherListModel.weatherDetailsList) {
             WeatherData weatherData = new WeatherData(
@@ -85,6 +93,23 @@ public class WeatherClient {
             position++;
         }
 
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChildren()) {
+                    int index = 0;
+                    for (WeatherData weatherData : weatherDataList) {
+                        dbRef.child(Integer.toString(index)).setValue(weatherData);
+                        index++;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         return weatherDataList;
     }
 
