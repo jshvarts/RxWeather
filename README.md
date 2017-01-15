@@ -6,7 +6,7 @@ The weather data for a configurable zip code is looked up using Retrofit2 and re
 If you are interested in learning RxJava and RxAndroid but do not know where to start, this may be a perfect 
 way to learn! 
 
-![Screenshot](screenshot.png?raw=true "App Screenshot")
+![Screenshot](screenshot1.png?raw=true "App Screenshot")
 
 ## Unit Tests
 
