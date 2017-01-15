@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
     <string name="app_name">RxWeather</string>
     <string name="error_message_generic">There was an error loading weather data.</string>
     <string name="error_message_offline">You are in offline mode.</string>
@@ -17,4 +17,5 @@
     <string name="preference_units_entry_imperial_value">Imperial</string>
     <string name="preference_units_entry_metric_value">Metric</string>
 
+    <string name="format_temperature"><xliff:g if="temp">%1$s</xliff:g>\u00B0%2$s</string>
 </resources>

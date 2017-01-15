@@ -20,12 +20,14 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherViewHolder> impl
     private final LayoutInflater inflater;
     private final Context context;
     private final WeatherClickListener listener;
+    private boolean isMetric;
 
     public WeatherAdapter(Context context, WeatherClickListener listener) {
         this.context = context;
         this.listener = listener;
         inflater = LayoutInflater.from(context);
         weatherDataList = new ArrayList<>();
+        isMetric = true;
     }
 
     @Override
@@ -42,6 +44,9 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherViewHolder> impl
         notifyDataSetChanged();
     }
 
+    public void setIsMetric(boolean isMetric) {
+        this.isMetric = isMetric;
+    }
     @Override
     public WeatherViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View headerView = inflater.inflate(R.layout.list_weather_today, parent, false);
@@ -57,7 +62,7 @@ public class WeatherAdapter extends RecyclerView.Adapter<WeatherViewHolder> impl
 
     @Override
     public void onBindViewHolder(WeatherViewHolder holder, int position) {
-        holder.populate(weatherDataList.get(position), position);
+        holder.populate(weatherDataList.get(position), position, isMetric);
     }
 
     @Override

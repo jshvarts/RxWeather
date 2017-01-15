@@ -35,7 +35,7 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void populate(WeatherData weatherData, int position) {
+    public void populate(WeatherData weatherData, int position, boolean isMetric) {
         itemView.setTag(weatherData);
 
         String date;
@@ -52,8 +52,15 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder {
         Picasso.with(itemView.getContext())
                 .load(getImageUrl(weatherData.getIcon()))
                 .into(weatherImage);
-        minTemp.setText(getRoundedWeatherTemp(weatherData.getMinTemp()));
-        maxTemp.setText(getRoundedWeatherTemp(weatherData.getMaxTemp()));
+
+        if (isMetric) {
+            maxTemp.setText(itemView.getContext().getString(R.string.format_temperature, getRoundedWeatherTemp(weatherData.getMaxTemp()), "C"));
+            minTemp.setText(itemView.getContext().getString(R.string.format_temperature, getRoundedWeatherTemp(weatherData.getMinTemp()), "C"));
+        } else {
+            maxTemp.setText(itemView.getContext().getString(R.string.format_temperature, getRoundedWeatherTemp(weatherData.getMaxTemp()), "F"));
+            minTemp.setText(itemView.getContext().getString(R.string.format_temperature, getRoundedWeatherTemp(weatherData.getMinTemp()), "F"));
+        }
+
         weatherDetail.setText(weatherData.getWeatherDetail());
     }
 

@@ -51,6 +51,7 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
     private Subscription weatherSubscription;
     private String appId;
     private ValueEventListener valueEventListener;
+    private String units;
 
     private Observer<List<WeatherData>> retrofitWeatherObserver = new Observer<List<WeatherData>>() {
         @Override
@@ -95,6 +96,12 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
             Log.d(LOG_TAG, "onNext");
             valueEventListener = WeatherClient.newInstance().readFromDatabase(dataRef.child(appId), adapter, getActivity());
             dataRef.child(appId).addValueEventListener(valueEventListener);
+
+            if (units.equals("Metric")) {
+                adapter.setIsMetric(true);
+            } else {
+                adapter.setIsMetric(false);
+            }
         }
     };
 
@@ -129,7 +136,7 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
         String location = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_LOCATION, getString(R.string.preference_location_default));
-        String units = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_UNITS, getString(R.string.preference_units_entry_imperial_value));
+        units = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_UNITS, getString(R.string.preference_units_entry_imperial_value));
 
         adapter = new WeatherAdapter(getActivity(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
