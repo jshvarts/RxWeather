@@ -2,6 +2,8 @@ package com.jshvarts.rxweather.infrastruture;
 
 import android.app.Application;
 
+import com.google.firebase.database.FirebaseDatabase;
+
 public class RxWeatherApplication extends Application {
 
     public static final String BASE_WEATHER_URL = "http://api.openweathermap.org";
@@ -18,5 +20,6 @@ public class RxWeatherApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 }

@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">RxWeather</string>
-    <string name="error_message">There was an error loading weather data.</string>
+    <string name="error_message_generic">There was an error loading weather data.</string>
+    <string name="error_message_offline">You are in offline mode.</string>
+    <string name="error_message_check_connectione">Please check your internet connection.</string>
 
     <string name="preference_location_label">Location</string>
     <string name="preference_location_key">location</string>

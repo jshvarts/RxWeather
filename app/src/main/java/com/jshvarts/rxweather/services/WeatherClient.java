@@ -1,15 +1,20 @@
 package com.jshvarts.rxweather.services;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.jshvarts.rxweather.BuildConfig;
+import com.jshvarts.rxweather.R;
 import com.jshvarts.rxweather.entities.WeatherData;
 import com.jshvarts.rxweather.infrastruture.RxWeatherApplication;
 import com.jshvarts.rxweather.model.WeatherDescription;
 import com.jshvarts.rxweather.model.WeatherDetails;
 import com.jshvarts.rxweather.model.WeatherListModel;
+import com.jshvarts.rxweather.views.WeatherAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -121,6 +126,32 @@ public class WeatherClient {
             }
         });
         return weatherDataList;
+    }
+
+    public ValueEventListener readFromDatabase(DatabaseReference appDataRef, final WeatherAdapter weatherAdapter, final Context context) {
+        return appDataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<WeatherData> weatherDataList = new ArrayList<>();
+                if (dataSnapshot != null && dataSnapshot.hasChildren()) {
+                    for (DataSnapshot childDataSnapshot : dataSnapshot.getChildren()) {
+                        WeatherData weatherData = childDataSnapshot.getValue(WeatherData.class);
+                        weatherDataList.add(weatherData);
+                    }
+                }
+
+                if (weatherDataList.isEmpty()) {
+                    Toast.makeText(context, R.string.error_message_check_connectione, Toast.LENGTH_LONG).show();
+                }
+
+                weatherAdapter.setWeatherDataList(weatherDataList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private String getDate(int position) {

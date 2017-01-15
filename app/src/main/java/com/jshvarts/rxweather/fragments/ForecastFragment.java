@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.jshvarts.rxweather.R;
 import com.jshvarts.rxweather.entities.WeatherData;
 import com.jshvarts.rxweather.infrastruture.RxWeatherApplication;
@@ -49,8 +50,9 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
     private WeatherAdapter adapter;
     private Subscription weatherSubscription;
     private String appId;
+    private ValueEventListener valueEventListener;
 
-    private Observer<List<WeatherData>> weatherObserver = new Observer<List<WeatherData>>() {
+    private Observer<List<WeatherData>> retrofitWeatherObserver = new Observer<List<WeatherData>>() {
         @Override
         public void onCompleted() {
             Log.d(LOG_TAG, "onCompleted");
@@ -61,13 +63,38 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
         public void onError(Throwable e) {
             Log.d(LOG_TAG, "onError " + e);
             hideProgressBar();
-            Toast.makeText(getActivity(), R.string.error_message, Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), R.string.error_message_generic, Toast.LENGTH_LONG).show();
         }
 
         @Override
         public void onNext(List<WeatherData> weatherDataList) {
             Log.d(LOG_TAG, "onNext");
             adapter.setWeatherDataList(weatherDataList);
+        }
+    };
+
+    private Observer<List<WeatherData>> firebaseWeatherObserver = new Observer<List<WeatherData>>() {
+        @Override
+        public void onCompleted() {
+            Log.d(LOG_TAG, "onCompleted");
+            hideProgressBar();
+        }
+
+        @Override
+        public void onError(Throwable e) {
+            Log.d(LOG_TAG, "onError " + e);
+            hideProgressBar();
+            // read data while offline
+            valueEventListener = WeatherClient.newInstance().readFromDatabase(dataRef.child(appId), adapter, getActivity());
+            dataRef.child(appId).addValueEventListener(valueEventListener);
+            Toast.makeText(getActivity(), R.string.error_message_offline, Toast.LENGTH_LONG).show();
+        }
+
+        @Override
+        public void onNext(List<WeatherData> weatherDataList) {
+            Log.d(LOG_TAG, "onNext");
+            valueEventListener = WeatherClient.newInstance().readFromDatabase(dataRef.child(appId), adapter, getActivity());
+            dataRef.child(appId).addValueEventListener(valueEventListener);
         }
     };
 
@@ -121,7 +148,7 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
                         }
                     })
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(weatherObserver);
+                    .subscribe(firebaseWeatherObserver);
     }
 
     @Override
@@ -129,6 +156,9 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
         super.onDestroy();
         if (weatherSubscription != null && !weatherSubscription.isUnsubscribed()) {
             weatherSubscription.unsubscribe();
+        }
+        if (valueEventListener != null) {
+            dataRef.child(appId).removeEventListener(valueEventListener);
         }
     }
 
