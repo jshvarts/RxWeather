@@ -42,8 +42,6 @@ public class WeatherViewHolder extends RecyclerView.ViewHolder {
 
         if (position == 0) {
             date = "Today";
-        } else if (position == 1) {
-            date = "Tomorrow";
         } else {
             date = weatherData.getWeatherDate();
         }

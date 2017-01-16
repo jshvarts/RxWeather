@@ -71,8 +71,8 @@
 
         <ImageView
             android:id="@+id/list_weather_item_imageView"
-            android:layout_width="64dp"
-            android:layout_height="64dp" />
+            android:layout_width="70dp"
+            android:layout_height="70dp" />
 
         <TextView
             android:id="@+id/list_weather_item_weatherDetail"

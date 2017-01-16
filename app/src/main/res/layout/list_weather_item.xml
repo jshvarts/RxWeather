@@ -16,7 +16,7 @@
         <ImageView
             android:id="@+id/list_weather_item_imageView"
             android:layout_width="0dp"
-            android:layout_height="38dp"
+            android:layout_height="50dp"
             android:layout_weight="0.2" />
         
         <LinearLayout
