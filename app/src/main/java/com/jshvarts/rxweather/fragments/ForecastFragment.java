@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
@@ -41,29 +41,31 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
 
     private DatabaseReference dataRef = FirebaseDatabase.getInstance().getReferenceFromUrl(RxWeatherApplication.BASE_FIREBASE_URL);
 
-    @BindView(R.id.fragment_forecast_recyclerView)
-    RecyclerView recyclerView;
+    @BindView(R.id.swipe_refresh_container)
+    protected SwipeRefreshLayout swipeRefreshLayout;
 
-    @BindView(R.id.fragment_forecast_progressBar)
-    ProgressBar progressBar;
+    @BindView(R.id.fragment_forecast_recyclerView)
+    protected RecyclerView recyclerView;
 
     private WeatherAdapter adapter;
     private Subscription weatherSubscription;
     private String appId;
     private ValueEventListener valueEventListener;
+    private String location;
     private String units;
 
     private Observer<List<WeatherData>> retrofitWeatherObserver = new Observer<List<WeatherData>>() {
         @Override
         public void onCompleted() {
             Log.d(LOG_TAG, "onCompleted");
-            hideProgressBar();
+            swipeRefreshLayout.setRefreshing(false);
         }
 
         @Override
         public void onError(Throwable e) {
             Log.d(LOG_TAG, "onError " + e);
-            hideProgressBar();
+            swipeRefreshLayout.setRefreshing(false);
+
             Toast.makeText(getActivity(), R.string.error_message_generic, Toast.LENGTH_LONG).show();
         }
 
@@ -78,13 +80,14 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
         @Override
         public void onCompleted() {
             Log.d(LOG_TAG, "onCompleted");
-            hideProgressBar();
+            swipeRefreshLayout.setRefreshing(false);
         }
 
         @Override
         public void onError(Throwable e) {
             Log.d(LOG_TAG, "onError " + e);
-            hideProgressBar();
+            swipeRefreshLayout.setRefreshing(false);
+
             // read data while offline
             valueEventListener = WeatherClient.newInstance().readFromDatabase(dataRef.child(appId), adapter, getActivity());
             dataRef.child(appId).addValueEventListener(valueEventListener);
@@ -124,8 +127,6 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
             appPreferences.edit().putString(RxWeatherApplication.APP_ID, appId).apply();
         }
 
-        showProgressBar();
-
         return rootView;
     }
 
@@ -134,17 +135,26 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
         super.onStart();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-        String location = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_LOCATION, getString(R.string.preference_location_default));
+        location = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_LOCATION, getString(R.string.preference_location_default));
         units = sharedPreferences.getString(RxWeatherApplication.PREFERENCE_UNITS, getString(R.string.preference_units_entry_imperial_value));
 
         adapter = new WeatherAdapter(getActivity(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getWeather(location, units);
+            }
+        });
+
         getWeather(location, units);
     }
 
     private void getWeather(String zip, String units) {
+            swipeRefreshLayout.setRefreshing(true);
+
             weatherSubscription = WeatherClient.newInstance()
                     .getWeather(zip, units)
                     .subscribeOn(Schedulers.io())
@@ -172,13 +182,5 @@ public class ForecastFragment extends Fragment implements WeatherAdapter.Weather
     @Override
     public void onClicked(WeatherData weatherData) {
         Log.d(LOG_TAG, "weather clicked");
-    }
-
-    private void showProgressBar() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void hideProgressBar() {
-        progressBar.setVisibility(View.GONE);
     }
 }
