@@ -4,6 +4,9 @@
     <string name="error_message_offline">You are in offline mode.</string>
     <string name="error_message_check_connectione">Please check your internet connection.</string>
 
+    <string name="preference_auto_location_label">Use current location</string>
+    <string name="preference_auto_location_key">auto_location</string>
+
     <string name="preference_location_label">Location</string>
     <string name="preference_location_key">location</string>
     <string name="preference_location_default">11229</string>

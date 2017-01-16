@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <SwitchPreference
+        android:id="@+id/preference_auto_location"
+        android:key="@string/preference_auto_location_key"
+        android:title="@string/preference_auto_location_label"
+        android:defaultValue="false"
+        android:order="0" />
+
     <EditTextPreference
         android:title="@string/preference_location_label"
         android:key="@string/preference_location_key"
         android:defaultValue="@string/preference_location_default"
         android:inputType="text"
-        android:singleLine="true" />
+        android:singleLine="true"
+        android:order="1" />
 
     <ListPreference
         android:title="@string/preference_units_label"
@@ -14,6 +22,7 @@
         android:defaultValue="@string/preference_units_entry_metric"
         android:dialogTitle="@string/preference_units_label_title"
         android:entries="@array/preference_units_entries"
-        android:entryValues="@array/preference_units_entry_values" />
+        android:entryValues="@array/preference_units_entry_values"
+        android:order="2" />
 
 </PreferenceScreen>
