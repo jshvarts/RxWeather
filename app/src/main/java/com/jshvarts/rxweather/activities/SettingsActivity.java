@@ -1,6 +1,8 @@
 package com.jshvarts.rxweather.activities;
 
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
@@ -9,11 +11,18 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 
 import com.jshvarts.rxweather.R;
 import com.jshvarts.rxweather.infrastruture.RxWeatherApplication;
 
 public class SettingsActivity extends PreferenceActivity {
+
+    private static final String LOG_TAG = SettingsActivity.class.getSimpleName();
+
+    private static final int ACCESS_FINE_LOCATION_PERMISSION_REQUEST_CODE = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,8 +88,19 @@ public class SettingsActivity extends PreferenceActivity {
             } else if (preference instanceof EditTextPreference) {
                 preference.setSummary(stringValue);
             } else if (preference instanceof SwitchPreference) {
-                ((SwitchPreference) preference).setChecked((boolean) value);
-                if (((SwitchPreference) preference).isChecked()) {
+                SwitchPreference switchPreference = (SwitchPreference) preference;
+                // TODO set preferences based on permission callback granted
+                switchPreference.setChecked((boolean) value);
+                if (switchPreference.isChecked()) {
+
+                    if (ContextCompat.checkSelfPermission(getActivity(),
+                            Manifest.permission.ACCESS_FINE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(getActivity(),
+                                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                ACCESS_FINE_LOCATION_PERMISSION_REQUEST_CODE);
+                    }
+
                     Preference locationEditTextPreference = findPreference(getString(R.string.preference_location_key));
                     getPreferenceScreen().removePreference(locationEditTextPreference);
                 } else {
@@ -97,6 +117,21 @@ public class SettingsActivity extends PreferenceActivity {
                         locationEditTextPreference.setOrder(1);
                         getPreferenceScreen().addPreference(locationEditTextPreference);
                     }
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (grantResults.length == 0) {
+            Log.d(LOG_TAG, "grantResults array is empty");
+            return;
+        }
+        switch (requestCode) {
+            case ACCESS_FINE_LOCATION_PERMISSION_REQUEST_CODE: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(LOG_TAG, "ACCESS_FINE_LOCATION permission was granted");
                 }
             }
         }

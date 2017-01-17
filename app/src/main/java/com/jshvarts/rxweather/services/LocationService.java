@@ -1,9 +1,9 @@
 package com.jshvarts.rxweather.services;
 
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -57,19 +57,19 @@ public class LocationService {
                     }
                 };
 
-                final Criteria locationCriteria = new Criteria();
-                locationCriteria.setAccuracy(Criteria.ACCURACY_COARSE);
-                locationCriteria.setPowerRequirement(Criteria.POWER_LOW);
-                final String locationProvider = locationManager
-                        .getBestProvider(locationCriteria, true);
+                // TODO implement location service strategy such as first use network provider and fallback on GPS
+                //final Criteria locationCriteria = new Criteria();
+                //locationCriteria.setAccuracy(Criteria.ACCURACY_COARSE);
+                //locationCriteria.setPowerRequirement(Criteria.POWER_LOW);
+                final LocationProvider locationProvider = locationManager.getProvider(LocationManager.GPS_PROVIDER);
+                Log.d(LOG_TAG, "locationProvider is " + locationProvider.getName());
 
                 if (Looper.myLooper() == null) {
                     Looper.prepare();
                 }
 
                 try {
-
-                    locationManager.requestSingleUpdate(locationProvider,
+                    locationManager.requestSingleUpdate(locationProvider.getName(),
                             locationListener, Looper.myLooper());
                 } catch (SecurityException e) {
                     Log.d(LOG_TAG, "No Location permission given");

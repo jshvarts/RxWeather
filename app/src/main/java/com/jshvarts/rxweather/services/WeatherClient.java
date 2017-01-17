@@ -141,7 +141,7 @@ public class WeatherClient {
                 }
 
                 if (weatherDataList.isEmpty()) {
-                    Toast.makeText(context, R.string.error_message_check_connectione, Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, R.string.error_message_check_connection, Toast.LENGTH_LONG).show();
                 }
 
                 weatherAdapter.setWeatherDataList(weatherDataList);
